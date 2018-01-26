@@ -16,17 +16,18 @@
           }}</span>
         </div>
       </div>
-      <div v-if="seller.supports" class="support-detail">
+      <div v-if="seller.supports" class="support-detail" @click="showDetail">
         <span class="support-num">{{ seller.supports.length }}个</span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="showDetail">
       <span class="bulletin-icon"></span><span class="bulletin">{{ seller.bulletin }}</span><i class="icon-keyboard_arrow_right"></i>
     </div>
     <div class="background">
       <img width="100%" height="100%" :src="seller.avatar">
     </div>
+    <div v-show="detail" class="detail"></div>
   </div>
 </template>
 
@@ -37,11 +38,19 @@
         type: Object
       }
     },
+    data () {
+      return {
+        detail: false
+      }
+    },
     methods: {
       getSupportType: function (type) {
         if (type === 0) {
           return 'decrease'
         }
+      },
+      showDetail: function () {
+        this.detail = !this.detail
       }
     }
   }
@@ -147,4 +156,12 @@
     width: 100%
     z-index: -1
     filter: blur(10px)
+  .detail
+    position: fixed
+    top: 0
+    left: 0
+    z-index: 100
+    width: 100%
+    height: 100%
+    background-color: rgba(7,17,27,0.8)
 </style>
