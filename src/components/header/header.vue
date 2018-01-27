@@ -22,16 +22,56 @@
       </div>
     </div>
     <div class="bulletin-wrapper" @click="showDetail">
-      <span class="bulletin-icon"></span><span class="bulletin">{{ seller.bulletin }}</span><i class="icon-keyboard_arrow_right"></i>
+      <span class="bulletin-icon"></span><span class="bulletin">{{ seller.bulletin }}</span><i
+      class="icon-keyboard_arrow_right"></i>
     </div>
     <div class="background">
       <img width="100%" height="100%" :src="seller.avatar">
     </div>
-    <div v-show="detail" class="detail"></div>
+    <transition name="fade">
+      <div v-show="detail" class="detail">
+        <div class="detail-wrapper">
+          <div class="detail-content">
+            <h1 class="detail-name">{{ seller.name }}</h1>
+            <div class="star-wrapper">
+              <star :size="48" :score="seller.score"></star>
+            </div>
+            <div class="detail-supports">
+              <div class="title">
+                <div class="line"></div>
+                <div class="text">优惠信息</div>
+                <div class="line"></div>
+              </div>
+              <div v-if="seller.supports" class="content">
+                <div class="content-line" v-for="(value, index) in seller.supports" :key="index">
+                  <span class="icon" :class="getSupportType(seller.supports[index].type)"></span>
+                  <span class="support-content">{{ seller.supports[index].description }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="detail-bulletin">
+              <div class="title">
+                <div class="line"></div>
+                <div class="text">商家公告</div>
+                <div class="line"></div>
+              </div>
+              <div class="content">
+                <p class="bulletin-content">{{ seller.bulletin }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-close">
+          <i class="icon-close" @click="showDetail"></i>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+  import star from 'components/star/star.vue'
+
   export default {
     props: {
       seller: {
@@ -47,17 +87,28 @@
       getSupportType: function (type) {
         if (type === 0) {
           return 'decrease'
+        } else if (type === 1) {
+          return 'discount'
+        } else if (type === 2) {
+          return 'guarantee'
+        } else if (type === 3) {
+          return 'invoice'
+        } else if (type === 4) {
+          return 'special'
         }
       },
       showDetail: function () {
         this.detail = !this.detail
       }
+    },
+    components: {
+      star
     }
   }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/mixin.styl"
+  @import "../../common/stylus/index.styl"
   .header
     position: relative
     color: #fff
@@ -104,27 +155,37 @@
             background-size: 12px 12px
           .decrease
             bg-img('decrease_1')
-          .support-description
-            vertical-align: top
-            font-size: 10px
-            font-weight: 200
+          .discount
+            bg-img('discount_1')
+          .guarantee
+            bg-img('guarantee_1')
+          .invoice
+            bg-img('invoice_1')
+          .special
+            bg-img('special_1')
 
-      .support-detail
-        position: absolute
-        text-align: center
-        right: 10px
-        bottom: 18px
-        width: 48px
-        height: 24px
-        border-radius: 7px
-        line-height: 15px
-        padding: 7px 0px 0px 5px
-        background-color: rgba(0, 0, 0, 0.2)
-        .support-num
-          font-size: 12px
-          font-weight: 200px
-        .icon-keyboard_arrow_right
-          vertical-align: middle
+  .support-description
+    vertical-align: top
+    font-size: 10px
+    font-weight: 200
+
+  .support-detail
+    position: absolute
+    text-align: center
+    right: 10px
+    bottom: 18px
+    width: 48px
+    height: 24px
+    border-radius: 7px
+    line-height: 15px
+    padding: 7px 0px 0px 5px
+    background-color: rgba(0, 0, 0, 0.2)
+    .support-num
+      font-size: 12px
+      font-weight: 200px
+    .icon-keyboard_arrow_right
+      vertical-align: middle
+
   .bulletin-wrapper
     padding-right: 22px
     position: relative
@@ -149,6 +210,7 @@
       position: absolute
       right: 10px
       bottom: 6px
+
   .background
     position: absolute
     left: 0
@@ -156,6 +218,7 @@
     width: 100%
     z-index: -1
     filter: blur(10px)
+
   .detail
     position: fixed
     top: 0
@@ -163,5 +226,80 @@
     z-index: 100
     width: 100%
     height: 100%
-    background-color: rgba(7,17,27,0.8)
+    overflow: auto
+    background-color: rgba(7, 17, 27, 0.8)
+    .detail-wrapper
+      min-height: 100%
+      width: 100%
+      -webkit-backdrop-filter: blur(10px)
+      .detail-content
+        padding-top: 32px
+        padding-bottom: 96px
+        .detail-name
+          text-align: center
+          font-size: 16px
+          font-weight: 700
+          line-height: 18px
+        .star-wrapper
+          margin-top: 16px
+          text-align: center
+        .title
+          display: flex
+          width: 80%
+          margin: 28px auto 24px auto
+          .line
+            flex: 1
+            position: relative
+            top: -6px
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2)
+          .text
+            padding: 0 12px
+            font-weight: 700
+            font-size: 14px
+
+        .content
+          line-height: 14px
+          width: 80%
+          margin: 0 auto
+          .content-line
+            margin-bottom: 12px
+            .icon
+              display: inline-block
+              vertical-align: top
+              margin-right: 12px
+              width: 14px
+              height: 14px
+              background-size: 14px 14px
+              background-repeat: no-repeat
+            .decrease
+              bg-img('decrease_2')
+            .discount
+              bg-img('discount_2')
+            .guarantee
+              bg-img('guarantee_2')
+            .invoice
+              bg-img('invoice_2')
+            .special
+              bg-img('special_2')
+            .support-content
+              font-size: 12px
+              font-weight: 200
+          .bulletin-content
+            line-height: 24px
+            font-size: 12px
+            font-weight: 200
+
+    .detail-close
+      position: relative
+      margin: -64px auto 0 auto
+      width: 32px
+      height: 32px
+      font-size: 32px
+      color: rgba(255, 255, 255, 0.5)
+      clear: both
+
+  .fade-enter, .fade-leave-to
+    opacity: 0
+  .fade-enter-active, .fade-leave-active
+    transition: all 0.5s
 </style>
