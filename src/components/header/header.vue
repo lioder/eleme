@@ -12,7 +12,7 @@
           <span class="description-content">{{ seller.description }} / {{ seller.deliveryTime }} 分钟送达</span>
         </div>
         <div v-if="seller.supports" class="support">
-          <span class="icon" :class="getSupportType(seller.supports[0].type)"></span><span class="support-description">{{ seller.supports[0].description
+          <sicon :iconType="seller.supports[0].type" :size="12" :scene="1"></sicon><span class="support-description">{{ seller.supports[0].description
           }}</span>
         </div>
       </div>
@@ -44,7 +44,7 @@
               </div>
               <div v-if="seller.supports" class="content">
                 <div class="content-line" v-for="(value, index) in seller.supports" :key="index">
-                  <span class="icon" :class="getSupportType(seller.supports[index].type)"></span>
+                  <sicon :iconType="seller.supports[index].type" :scene="2" :size="14"></sicon>
                   <span class="support-content">{{ seller.supports[index].description }}</span>
                 </div>
               </div>
@@ -71,7 +71,7 @@
 
 <script>
   import star from 'components/star/star.vue'
-
+  import sicon from 'components/support-icon/support-icon.vue'
   export default {
     props: {
       seller: {
@@ -102,7 +102,8 @@
       }
     },
     components: {
-      star
+      star,
+      sicon
     }
   }
 </script>
@@ -140,29 +141,15 @@
               font-size: 16px
               font-weight: bold
         .description
-          margin-bottom: 8px
+          margin-bottom: 9px
           .description-content
             font-size: 12px
             font-weight: 200
             line-height: 12px
         .support
-          line-height: 16px
+          line-height: 14px
           .icon
-            display: inline-block
             margin-right: 4px
-            width: 12px
-            height: 12px
-            background-size: 12px 12px
-          .decrease
-            bg-img('decrease_1')
-          .discount
-            bg-img('discount_1')
-          .guarantee
-            bg-img('guarantee_1')
-          .invoice
-            bg-img('invoice_1')
-          .special
-            bg-img('special_1')
 
   .support-description
     vertical-align: top
@@ -264,23 +251,8 @@
           .content-line
             margin-bottom: 12px
             .icon
-              display: inline-block
               vertical-align: top
               margin-right: 12px
-              width: 14px
-              height: 14px
-              background-size: 14px 14px
-              background-repeat: no-repeat
-            .decrease
-              bg-img('decrease_2')
-            .discount
-              bg-img('discount_2')
-            .guarantee
-              bg-img('guarantee_2')
-            .invoice
-              bg-img('invoice_2')
-            .special
-              bg-img('special_2')
             .support-content
               font-size: 12px
               font-weight: 200

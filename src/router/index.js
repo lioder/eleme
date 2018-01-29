@@ -8,10 +8,12 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
+  {path: '/', redirect: '/goods'},
   {path: '/goods', component: goods},
   {path: '/ratings', component: ratings},
   {path: '/seller', component: seller}
 ]
+
 export default new VueRouter({
   routes,
   linkActiveClass: 'active'
