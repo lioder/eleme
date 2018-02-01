@@ -1,16 +1,17 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li class="menu" v-for="menu in goods" :key="menu.id">
+        <li v-for="(menu,index) in goods" :key="index" class="menu" :class="{'current': currentIndex === index}"
+            @click="selectMenu(index,$event)" ref="menuList">
           <span class="menu-item"> <sicon v-show="menu.type > -1" :iconType="menu.type" :scene="3"
                                           :size="12"></sicon>{{ menu.name }}</span>
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
-        <li v-for="(item,index) in goods" :key="index">
+        <li v-for="(item,index) in goods" :key="index" ref="foodList">
           <h1 class="title">{{ item.name }}</h1>
           <ul>
             <li v-for="(food,index) in item.foods" :key="index" class="content">
@@ -38,11 +39,25 @@
 
 <script type="text/ecmascript-6">
   import sicon from 'components/support-icon/support-icon.vue'
+  import BScroll from 'better-scroll'
 
   export default {
     data () {
       return {
-        goods: []
+        goods: [],
+        height: [],
+        scrollY: 0
+      }
+    },
+    computed: {
+      currentIndex: function () {
+        for (let i = 0; i < this.height.length; i++) {
+          if ((!this.height[i + 1]) || (this.scrollY >= this.height[i] && this.scrollY < this.height[i + 1])) {
+            this.followScroll(i)
+            return i
+          }
+        }
+        return 0
       }
     },
     created () {
@@ -51,11 +66,50 @@
         response = response.data
         if (response.errno === ERR_OK) {
           this.goods = response.data
+          this.$nextTick(() => {
+            this.initScroll()
+            this.scrollHeight()
+          })
         }
       })
     },
     components: {
       sicon
+    },
+    methods: {
+      selectMenu: function (index, event) {
+        if (!event._constructed) {
+          return
+        }
+        let list = this.$refs.foodList
+        let el = list[index]
+        this.foodsScroll.scrollToElement(el, 300)
+      },
+      initScroll: function () {
+        this.menuScroll = new BScroll(this.$refs.menuWrapper, {
+          click: true
+        })
+        this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
+          probeType: 3
+        })
+        this.foodsScroll.on('scroll', (pos) => {
+          this.scrollY = Math.abs(Math.round(pos.y))
+        })
+      },
+      followScroll: function (index) {
+        let list = this.$refs.menuList
+        let el = list[index]
+        this.menuScroll.scrollToElement(el, 300, 0, -100)
+      },
+      scrollHeight: function () {
+        let list = this.$refs.foodList
+        let h = 0
+        this.height.push(h)
+        for (let i = 0; i < list.length; i++) {
+          h += list[i].clientHeight
+          this.height.push(h)
+        }
+      }
     }
   }
 </script>
@@ -64,7 +118,7 @@
   @import "../../common/stylus/mixin.styl"
   .goods
     position: absolute
-    top: 177px
+    top: 179px
     bottom: 46px
     width: 100%
     display: flex
@@ -74,6 +128,7 @@
       background-color: #f3f5f7
       .menu
         display: table
+        width: 56px
         height: 54px
         padding: 0 12px
         line-height: 14px
@@ -81,11 +136,23 @@
         .menu-item
           vertical-align: middle
           display: table-cell
+          width: 56px
           font-size: 12px
-          font-weight: 200
+          font-weight: 300
           border-1px(rgba(7, 17, 27, 0.1))
           .icon
             margin-right: 2px
+      .menu:last-child
+        .menu-item
+          no-border()
+      .current
+        position: relative
+        margin-top: -1px
+        z-index: 10
+        background-color: #fff
+        .menu-item
+          font-weight: 700
+          no-border()
     .foods-wrapper
       flex: 1
       .title
@@ -101,13 +168,16 @@
         margin: 18px
         padding-bottom: 18px
         border-1px(rgba(7, 17, 27, 0.1))
+        &:last-child
+          no-border()
+          margin-bottom: 0
         .icon
           flex: 0 0 57px
           margin-right: 10px
         .food
           flex: 1
           .food-name
-            margin-bottom: 8px
+            margin-bottom: 9px
             padding-top: 2px
             line-height: 14px;
             font-size: 14px
@@ -119,6 +189,8 @@
             color: rgb(147, 153, 159)
             .month-sail
               margin-right: 12px
+          .food-sail
+            margin-bottom: 2px
           .price
             font-size: 14px
             font-weight: 700
@@ -128,5 +200,6 @@
             font-size: 10px
             line-height: 24px
             color: rgb(147, 153, 159)
+            text-decoration: line-through
 
 </style>

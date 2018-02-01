@@ -21,9 +21,9 @@
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
-    <div class="bulletin-wrapper" @click="showDetail">
+    <div class="bulletin-wrapper">
       <span class="bulletin-icon"></span><span class="bulletin">{{ seller.bulletin }}</span><i
-      class="icon-keyboard_arrow_right"></i>
+      class="icon-keyboard_arrow_right" @click="showDetail"></i>
     </div>
     <div class="background">
       <img width="100%" height="100%" :src="seller.avatar">
