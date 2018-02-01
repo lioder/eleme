@@ -22,20 +22,20 @@
   export default {
     props: {
       selectedFoods: {
-        type: Array,
-        default: function () {
-          return [{
-            price: 10,
-            count: 2
-          }]
-        }
+        type: Array
+//        default: function () {
+//          return [{
+//            price: 10,
+//            count: 2
+//          }]
+//        }
       },
       deliveryPrice: {
         type: Number,
         default: 0
       },
       minPrice: {
-        tyoe: Number,
+        type: Number,
         default: 0
       }
     },
@@ -49,7 +49,11 @@
         return total
       },
       totalCount: function () {
-        let total = 10
+        let total = 0
+        for (let i = 0; i < this.selectedFoods.length; i++) {
+          let food = this.selectedFoods[i]
+          total += (food.count)
+        }
         return total
       },
       payDesc: function () {
