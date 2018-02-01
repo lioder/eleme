@@ -34,14 +34,21 @@
         </li>
       </ul>
     </div>
+    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import sicon from 'components/support-icon/support-icon.vue'
+  import shopcart from 'components/shopcart/shopcart.vue'
   import BScroll from 'better-scroll'
 
   export default {
+    props: {
+      seller: {
+        type: Object
+      }
+    },
     data () {
       return {
         goods: [],
@@ -74,7 +81,8 @@
       })
     },
     components: {
-      sicon
+      sicon,
+      shopcart
     },
     methods: {
       selectMenu: function (index, event) {
