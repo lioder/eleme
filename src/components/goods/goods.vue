@@ -28,14 +28,14 @@
                   <span class="price">￥{{ food.price }}</span>
                   <span class="old-price" v-show="food.oldPrice">￥{{ food.oldPrice}}</span>
                 </div>
-                <cartcontrol class="cart-control" :food="food"></cartcontrol>
+                <cartcontrol class="cart-control" :food="food" @add="addFood"></cartcontrol>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectedFoods="selectedFoods"></shopcart>
+    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectedFoods="selectedFoods" ref="shopcart" @empty="emptyFoods"></shopcart>
   </div>
 </template>
 
@@ -132,6 +132,18 @@
           h += list[i].clientHeight
           this.height.push(h)
         }
+      },
+      addFood: function (target) {
+        this.$refs.shopcart.drop(target)
+      },
+      emptyFoods: function () {
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count > 0) {
+              food.count = 0
+            }
+          })
+        })
       }
     }
   }

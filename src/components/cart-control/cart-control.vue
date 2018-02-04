@@ -6,12 +6,11 @@
       </div>
     </transition>
     <div class="count" v-show="food.count > 0">{{ food.count }}</div>
-    <div class="add" @click="add">
+    <div class="add" @click="add($event)">
       <i class="icon-add_circle"></i>
     </div>
   </div>
 </template>
-
 <script type="text/ecmascript-6">
   import Vue from 'vue'
 
@@ -21,15 +20,16 @@
         type: Object
       }
     },
-    created () {
-      Vue.set(this.food, 'count', 0)
-    },
     methods: {
       add: function (event) {
         if (!event._constructed) {
           return
         }
+        if (!this.food.count) {
+          Vue.set(this.food, 'count', 0)
+        }
         this.food.count++
+        this.$emit('add', event.target)
       },
       decrease: function () {
         if (!event._constructed) {
@@ -45,6 +45,7 @@
   @import "../../common/stylus/icon.styl"
   .cart-control
     font-size: 0px
+    line-height: 25px
     .rotate-out-enter-active, .rotate-out-leave-active
       transition: all 0.4s linear
     .rotate-out-enter, .rotate-out-leave-to
@@ -61,7 +62,6 @@
       padding-right: 6px
     .count
       display: inline-block
-      padding-top: 7px
       vertical-align: top
       font-size: 11px
 
