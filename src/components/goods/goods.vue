@@ -1,41 +1,48 @@
 <template>
-  <div class="goods">
-    <div class="menu-wrapper" ref="menuWrapper">
-      <ul>
-        <li v-for="(menu,index) in goods" :key="index" class="menu" :class="{'current': currentIndex === index}"
-            @click="selectMenu(index,$event)" ref="menuList">
+  <div>
+    <div class="goods">
+      <div class="menu-wrapper" ref="menuWrapper">
+        <ul>
+          <li v-for="(menu,index) in goods" :key="index" class="menu" :class="{'current': currentIndex === index}"
+              @click="selectMenu(index,$event)" ref="menuList">
           <span class="menu-item"> <sicon v-show="menu.type > -1" :iconType="menu.type" :scene="3"
                                           :size="12"></sicon>{{ menu.name }}</span>
-        </li>
-      </ul>
-    </div>
-    <div class="foods-wrapper" ref="foodsWrapper">
-      <ul>
-        <li v-for="(item,index) in goods" :key="index" ref="foodList">
-          <h1 class="title">{{ item.name }}</h1>
-          <ul>
-            <li v-for="(food,index) in item.foods" :key="index" class="content">
-              <div class="icon">
-                <img width="57" height="57" :src="food.icon"/>
-              </div>
-              <div class="food">
-                <h1 class="food-name">{{ food.name }}</h1>
-                <p class="food-des">{{ food.description }}</p>
-                <div class="food-sail">
-                  <span class="month-sail">月售{{ food.sellCount }}份</span><span>好评率{{ food.rating }}%</span>
+          </li>
+        </ul>
+      </div>
+      <div class="foods-wrapper" ref="foodsWrapper">
+        <ul>
+          <li v-for="(item,index) in goods" :key="index" ref="foodList">
+            <h1 class="title">{{ item.name }}</h1>
+            <ul>
+              <li v-for="(food,index) in item.foods" :key="index" class="content" @click="showFoodDetail(food)">
+                <div class="icon">
+                  <img width="57" height="57" :src="food.icon"/>
                 </div>
-                <div>
-                  <span class="price">￥{{ food.price }}</span>
-                  <span class="old-price" v-show="food.oldPrice">￥{{ food.oldPrice}}</span>
+                <div class="food">
+                  <h1 class="food-name">{{ food.name }}</h1>
+                  <p class="food-des">{{ food.description }}</p>
+                  <div class="food-sail">
+                    <span class="month-sail">月售{{ food.sellCount }}份</span><span>好评率{{ food.rating }}%</span>
+                  </div>
+                  <div>
+                    <span class="price">￥{{ food.price }}</span>
+                    <span class="old-price" v-show="food.oldPrice">￥{{ food.oldPrice}}</span>
+                  </div>
+                  <cartcontrol class="cart-control" :food="food" @add="addFood"></cartcontrol>
                 </div>
-                <cartcontrol class="cart-control" :food="food" @add="addFood"></cartcontrol>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectedFoods="selectedFoods"
+                ref="shopcart" @empty="emptyFoods"></shopcart>
     </div>
-    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectedFoods="selectedFoods" ref="shopcart" @empty="emptyFoods"></shopcart>
+    <transition name="move">
+      <food ref="food" :food="selectedFood" v-show="foodDetailShow" class="food-detail" @back="foodDetailShow = false"
+            @add="addFood"></food>
+    </transition>
   </div>
 </template>
 
@@ -43,6 +50,7 @@
   import sicon from 'components/support-icon/support-icon.vue'
   import shopcart from 'components/shopcart/shopcart.vue'
   import cartcontrol from 'components/cart-control/cart-control.vue'
+  import food from 'components/food/food.vue'
   import BScroll from 'better-scroll'
 
   export default {
@@ -55,7 +63,9 @@
       return {
         goods: [],
         height: [],
-        scrollY: 0
+        scrollY: 0,
+        selectedFood: {},
+        foodDetailShow: false
       }
     },
     computed: {
@@ -96,7 +106,8 @@
     components: {
       sicon,
       shopcart,
-      cartcontrol
+      cartcontrol,
+      food
     },
     methods: {
       selectMenu: function (index, event) {
@@ -143,6 +154,14 @@
               food.count = 0
             }
           })
+        })
+      },
+      showFoodDetail: function (food) {
+        this.foodDetailShow = !this.foodDetailShow
+        this.selectedFood = food
+        let foodDetail = this.$refs.food
+        this.$nextTick(() => {
+          foodDetail.initScroll()
         })
       }
     }
@@ -240,4 +259,11 @@
             position: absolute
             right: 0px
             bottom: 12px
+
+  .food-detail
+    z-index: 15
+    &.move-enter-active, &.move-leave-active
+      transition: all 0.2s linear
+    &.move-enter, &.move-leave-to
+      transform: translate3d(100%, 0, 0)
 </style>

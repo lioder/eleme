@@ -218,6 +218,7 @@
     left: 0
     width: 100%
     height: 46px
+    z-index: 50
     .content
       display: flex
       font-size: 0px

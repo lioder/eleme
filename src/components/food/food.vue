@@ -1,0 +1,173 @@
+<template>
+  <div class="food-detail" ref="foodDetail">
+    <div>
+      <div class="image-header">
+        <img :src="food.image">
+        <div class="back" @click="back">
+          <i class="icon-arrow_lift"></i>
+        </div>
+      </div>
+      <div class="content">
+        <div class="food-name">
+          <h1>{{ food.name }}</h1>
+        </div>
+        <div class="food-sail">
+          <span class="sail-count">月售 {{ food.sellCount }} 份</span><span>好评率 {{ food.rating }}%</span>
+        </div>
+        <div class="price">
+          <span class="new-price">￥{{ food.price }}</span>
+          <span class="old-price" v-if="food.oldPrice">￥{{ food.oldPrice }}</span>
+        </div>
+        <div class="cart-control-wrapper">
+          <cartcontrol :food="food" @add="addFood"></cartcontrol>
+        </div>
+        <div class="add-button" @click.stop.prevent="addFirst" v-show="!food.count || food.count === 0">加入购物车</div>
+      </div>
+      <split v-if="food.info"></split>
+      <div class="introduction" v-if="food.info">
+        <div class="title">商品介绍</div>
+        <div class="text">{{ food.info }}</div>
+      </div>
+      <split></split>
+      <div class="ratings">
+        <div class="title">商品评价</div>
+        <rating-selector></rating-selector>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  import cartcontrol from 'components/cart-control/cart-control.vue'
+  import ratingSelector from 'components/rating-selector/rating-selector.vue'
+  import split from 'components/split/split.vue'
+  import Vue from 'vue'
+  import BScroll from 'better-scroll'
+
+  export default {
+    props: {
+      food: {
+        type: Object
+      }
+    },
+    components: {
+      cartcontrol,
+      ratingSelector,
+      split
+    },
+    methods: {
+      back: function () {
+        this.$emit('back')
+      },
+      initScroll: function () {
+        if (!this.scroll) {
+          this.scroll = new BScroll(this.$refs.foodDetail, {
+            click: true
+          })
+        } else {
+          this.scroll.refresh()
+        }
+      },
+      addFirst: function (event) {
+        if (!event._constructed) {
+          return
+        }
+        this.$emit('add', event.target)
+        Vue.set(this.food, 'count', 1)
+      },
+      addFood: function (target) {
+        this.$emit('add', target)
+      }
+    }
+  }
+</script>
+
+<style lang="stylus">
+  .food-detail
+    position: fixed
+    left: 0
+    top: 0
+    bottom: 46px
+    z-index: 10
+    width: 100%
+    background-color: #fff
+    overflow: hidden
+    .image-header
+      position: relative
+      width: 100%
+      height: 0
+      padding-top: 100%
+      img
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+      .back
+        position: absolute
+        top: 8px
+        left: 0
+        width: 18px
+        height: 18px
+        padding: 10px
+        .icon-arrow_lift
+          color: #fff
+
+    .content
+      position: relative
+      margin: 18px
+      .food-name
+        margin-bottom: 8px
+        color: rgb(7, 17, 27)
+        line-height: 14px
+        font-size: 14px
+        font-weight: 700
+      .food-sail
+        margin-bottom: 18px
+        color: rgb(147, 153, 159)
+        font-size: 10px
+        line-height: 20px
+        .sail-count
+          margin-right: 12px
+      .price
+        .new-price
+          font-size: 14px
+          font-weight: 700
+          line-height: 24px
+          color: rgb(240, 20, 20)
+        .old-price
+          font-size: 10px
+          line-height: 24px
+          color: rgb(147, 153, 159)
+          text-decoration: line-through
+      .cart-control-wrapper, .add-button
+        position: absolute
+        right: 0
+        bottom: 0
+      .add-button
+        padding: 0 12px
+        width: 148
+        height: 26px
+        border-radius: 36px;
+        font-size: 10px
+        color: #fff
+        line-height: 26px
+        background-color: rgb(0, 160, 220)
+    .introduction
+      margin: 18px
+      .title
+        font-size: 14px
+        color: rgb(7, 17, 27)
+      .text
+        padding: 6px 0px
+        line-height: 24px
+        font-size: 12px
+        color: rgb(77, 85, 93)
+    .ratings
+      padding: 18px 18px 0 18px
+      border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+      .title
+        margin-bottom: 18px
+        font-size: 14px
+        color: rgb(7, 17, 27)
+</style>
