@@ -31,7 +31,7 @@
       <split></split>
       <div class="ratings">
         <div class="title">商品评价</div>
-        <rating-selector></rating-selector>
+        <rating :ratings="food.ratings" @refresh="initScroll"></rating>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@
 
 <script type="text/ecmascript-6">
   import cartcontrol from 'components/cart-control/cart-control.vue'
-  import ratingSelector from 'components/rating-selector/rating-selector.vue'
+  import rating from 'components/rating/rating.vue'
   import split from 'components/split/split.vue'
   import Vue from 'vue'
   import BScroll from 'better-scroll'
@@ -52,7 +52,7 @@
     },
     components: {
       cartcontrol,
-      ratingSelector,
+      rating,
       split
     },
     methods: {
@@ -83,6 +83,7 @@
 </script>
 
 <style lang="stylus">
+  @import "../../common/stylus/mixin.styl"
   .food-detail
     position: fixed
     left: 0
@@ -105,12 +106,16 @@
         height: 100%
       .back
         position: absolute
-        top: 8px
-        left: 0
-        width: 18px
-        height: 18px
-        padding: 10px
+        top: 12px
+        left: 12px
+        width: 15px
+        height: 15px
+        padding: 6px
+        border-radius: 50%
+        background: rgba(7, 17, 27, 0.5)
+        text-align: center
         .icon-arrow_lift
+          font-size: 12px
           color: #fff
 
     .content
@@ -165,7 +170,6 @@
         color: rgb(77, 85, 93)
     .ratings
       padding: 18px 18px 0 18px
-      border-bottom: 1px solid rgba(7, 17, 27, 0.1);
       .title
         margin-bottom: 18px
         font-size: 14px
