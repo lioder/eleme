@@ -24,7 +24,7 @@
         </li>
       </ul>
     </div>
-    <div class="no-rating" v-show="ratings.length === 0">暂无评价</div>
+    <div class="no-rating" v-show="!ratings || ratings.length === 0">暂无评价</div>
   </div>
 </template>
 
