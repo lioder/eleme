@@ -61,7 +61,7 @@
         bg-img('star48_off')
       .half
         g-img('star48_half')
-    .star-36
+    &.star-36
       span
         margin-right: 15px
         padding: 2px 0
@@ -75,7 +75,7 @@
         bg-img('star36_off')
       .half
         g-img('star36_half')
-    .star-24
+    &.star-24
       span
         margin-right: 10px
         padding: 2px 0
