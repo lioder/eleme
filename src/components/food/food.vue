@@ -31,7 +31,23 @@
       <split></split>
       <div class="ratings">
         <div class="title">商品评价</div>
-        <rating :ratings="food.ratings" @refresh="initScroll"></rating>
+        <rating @refresh="initScroll" ref="rating"></rating>
+        <div class="rating-wrapper">
+          <ul>
+            <li class="rating-item" v-for="(rating,index) in food.ratings" :key="index" v-show="needShow(rating)">
+              <div class="user">
+                <span class="username">{{ rating.username }}</span>
+                <img class="avatar" width="12px" height="12px" :src="rating.avatar">
+              </div>
+              <div class="rate-time">{{ rating.rateTime | formatDate}}</div>
+              <div class="text"><i
+                :class="{'icon-thumb_up': rating.rateType === 0,'icon-thumb_down': rating.rateType === 1}"></i>{{ rating.text
+                }}
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="no-rating" v-show="!food.ratings || food.ratings.length === 0">暂无评价</div>
       </div>
     </div>
   </div>
@@ -43,7 +59,9 @@
   import split from 'components/split/split.vue'
   import Vue from 'vue'
   import BScroll from 'better-scroll'
+  import {formatDate} from '../../common/js/date.js'
 
+  const ALL = 2
   export default {
     props: {
       food: {
@@ -54,6 +72,13 @@
       cartcontrol,
       rating,
       split
+    },
+    filters: {
+      formatDate: function (time) {
+        let date = new Date(time)
+        let result = formatDate(date, 'yyyy-MM-dd hh:mm')
+        return result
+      }
     },
     methods: {
       back: function () {
@@ -77,6 +102,18 @@
       },
       addFood: function (target) {
         this.$emit('add', target)
+      },
+      needShow: function (rating) {
+        let ratingSelector = this.$refs.rating
+        if (ratingSelector.onlyContent) {
+          if (rating.text.length <= 0) {
+            return false
+          }
+        }
+        if (ratingSelector.selectedType !== ALL && ratingSelector.selectedType !== rating.rateType) {
+          return false
+        }
+        return true
       }
     }
   }
@@ -169,9 +206,45 @@
         font-size: 12px
         color: rgb(77, 85, 93)
     .ratings
-      padding: 18px 18px 0 18px
       .title
-        margin-bottom: 18px
+        padding: 18px 0 0 18px
         font-size: 14px
         color: rgb(7, 17, 27)
+      .rating-wrapper
+        margin: 0 18px
+        .rating-item
+          padding: 16px 0
+          position: relative
+          border-1px(rgba(7, 17, 27, 0.1))
+          .user
+            position: absolute
+            top: 16px
+            right: 0
+            .username
+              font-size: 12px
+              color: rgb(147, 153, 159)
+              line-height: 12px
+            .avatar
+              vertical-align: top
+              margin-left: 6px
+              border-radius: 50%
+          .rate-time
+            margin-bottom: 6px
+            font-size: 10px
+            line-height: 12px
+            color: rgb(147, 153, 159)
+          .text
+            font-size: 12px
+            line-height: 16px
+            .icon-thumb_up, .icon-thumb_down
+              line-height: 24px
+              font-size: 12px
+              color: rgb(147, 153, 159)
+              margin-right: 4px
+            .icon-thumb_down
+              color: rgb(0, 160, 220)
+      .no-rating
+        height: 36px
+        margin: 12px 0
+        font-size: 12px
 </style>

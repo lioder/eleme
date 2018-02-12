@@ -63,7 +63,7 @@
         g-img('star48_half')
     &.star-36
       span
-        margin-right: 15px
+        margin-right: 8px
         padding: 2px 0
         width: 15px
         height: 14.5px
@@ -77,7 +77,7 @@
         g-img('star36_half')
     &.star-24
       span
-        margin-right: 10px
+        margin-right: 4px
         padding: 2px 0
         width: 10px
         height: 9.5px
