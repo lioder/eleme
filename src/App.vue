@@ -12,12 +12,15 @@
         <router-link to="/seller">商家</router-link>
       </div>
     </div>
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import header from './components/header/header.vue'
+
   const ERR_OK = 0
   export default {
     components: {
@@ -46,7 +49,7 @@
     width: 100%
     height: 40px
     line-height: 40px
-    border-1px(rgba(7,17,27,0.1))
+    border-1px(rgba(7, 17, 27, 0.1))
     background: #fff
     .tab-item
       flex: 1

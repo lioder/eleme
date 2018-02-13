@@ -120,8 +120,8 @@
     position: absolute
     top: 179px
     left: 0
-    bottom: 46px
     width: 100%
+    height: 100%
     font-size: 0
     overflow: hidden
     .overview
