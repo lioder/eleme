@@ -47,6 +47,20 @@
       <split></split>
       <div class="pics">
         <h1 class="title">商家实景</h1>
+        <div class="pic-wrapper" ref="picWrapper">
+          <ul class="pic-list" ref="picList">
+            <li class="pic-item">
+              <img class="pic" v-for="(pic,index) in seller.pics" :src="pic" width="120px" height="90px" :key="index">
+            </li>
+          </ul>
+        </div>
+      </div>
+      <split></split>
+      <div class="seller-info">
+        <h1 class="title">商家信息</h1>
+        <ul>
+          <li class="info" v-for="(info,index) in seller.infos" :key="index">{{ info }}</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -85,7 +99,21 @@
         } else {
           this.scroll.refresh()
         }
-        console.log(this.scroll)
+
+        const picWidth = 120
+        const margin = 6
+        const width = (picWidth + margin) * this.seller.pics.length - margin
+        this.$refs.picList.style.width = width + 'px'
+        this.$nextTick(() => {
+          if (!this.picScroll) {
+            this.picScroll = new BScroll(this.$refs.picWrapper, {
+              scrollX: true,
+              eventPassthrough: 'vertical'
+            })
+          } else {
+            this.picScroll.refresh()
+          }
+        })
       }
     },
     components: {
@@ -116,6 +144,7 @@
         .name
           margin-bottom: 8px
           font-size: 14px
+          font-weight: 500
           line-height: 14px
         .star
           display: inline-block
@@ -152,6 +181,7 @@
           .title
             margin-bottom: 4px
             font-size: 10px
+            font-weight: 500
             color: rgb(147, 153, 159)
           .text
             font-weight: 300
@@ -164,6 +194,7 @@
       .title
         margin-bottom: 8px
         font-size: 14px
+        font-weight: 500
       .text
         padding-bottom: 16px
         font-size: 12px
@@ -186,4 +217,32 @@
             vertical-align: top
             font-size: 12px
             line-height: 16px
+    .pics
+      padding: 18px
+      .title
+        margin-bottom: 12px
+        font-size: 14px
+        font-weight: 500
+      .pic-wrapper
+        width: 100%
+        white-space: nowrap
+        .pic
+          display: inline-block
+          margin-right: 6px
+          border-radius: 10px
+    .seller-info
+      padding: 18px
+      .title
+        padding-bottom: 12px
+        font-size: 14px
+        font-weight: 500
+        border-1px(rgba(7, 17, 27, 0.1))
+      .info
+        padding: 16px 0
+        font-size: 12px
+        line-height: 16px
+        border-1px(rgba(7, 17, 27, 0.1))
+        &:last-child
+          no-border()
+          padding-bottom: 0
 </style>
