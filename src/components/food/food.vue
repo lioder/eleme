@@ -29,6 +29,7 @@
         <div class="text">{{ food.info }}</div>
       </div>
       <split></split>
+      <div class="food-rating">
         <div class="title">商品评价</div>
         <rating @refresh="initScroll" ref="rating"></rating>
         <div class="rating-wrapper">
@@ -47,6 +48,7 @@
           </ul>
         </div>
         <div class="no-rating" v-show="!food.ratings || food.ratings.length === 0">暂无评价</div>
+      </div>
     </div>
   </div>
 </template>
@@ -57,7 +59,7 @@
   import split from 'components/split/split.vue'
   import Vue from 'vue'
   import BScroll from 'better-scroll'
-  import {formatDate} from '../../common/js/date.js'
+  import { formatDate } from '../../common/js/date.js'
 
   const ALL = 2
   export default {
@@ -203,45 +205,46 @@
         line-height: 24px
         font-size: 12px
         color: rgb(77, 85, 93)
-    .title
-      padding: 18px 0 0 18px
-      font-size: 14px
-      color: rgb(7, 17, 27)
-    .rating-wrapper
-      margin: 0 18px
-      .rating-item
-        padding: 16px 0
-        position: relative
-        border-1px(rgba(7, 17, 27, 0.1))
-        .user
-          position: absolute
-          top: 16px
-          right: 0
-          .username
-            font-size: 12px
-            color: rgb(147, 153, 159)
+    .food-rating
+      .title
+        padding: 18px 0 0 18px
+        font-size: 14px
+        color: rgb(7, 17, 27)
+      .rating-wrapper
+        margin: 0 18px
+        .rating-item
+          padding: 16px 0
+          position: relative
+          border-1px(rgba(7, 17, 27, 0.1))
+          .user
+            position: absolute
+            top: 16px
+            right: 0
+            .username
+              font-size: 12px
+              color: rgb(147, 153, 159)
+              line-height: 12px
+            .avatar
+              vertical-align: top
+              margin-left: 6px
+              border-radius: 50%
+          .rate-time
+            margin-bottom: 6px
+            font-size: 10px
             line-height: 12px
-          .avatar
-            vertical-align: top
-            margin-left: 6px
-            border-radius: 50%
-        .rate-time
-          margin-bottom: 6px
-          font-size: 10px
-          line-height: 12px
-          color: rgb(147, 153, 159)
-        .text
-          font-size: 12px
-          line-height: 16px
-          .icon-thumb_up, .icon-thumb_down
-            line-height: 24px
-            font-size: 12px
             color: rgb(147, 153, 159)
-            margin-right: 4px
-          .icon-thumb_down
-            color: rgb(0, 160, 220)
-      .no-rating
-        height: 36px
-        margin: 12px 0
-        font-size: 12px
+          .text
+            font-size: 12px
+            line-height: 16px
+            .icon-thumb_up, .icon-thumb_down
+              line-height: 24px
+              font-size: 12px
+              color: rgb(147, 153, 159)
+              margin-right: 4px
+            .icon-thumb_down
+              color: rgb(0, 160, 220)
+        .no-rating
+          height: 36px
+          margin: 12px 0
+          font-size: 12px
 </style>
