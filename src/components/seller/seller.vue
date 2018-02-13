@@ -4,9 +4,11 @@
       <div class="overview">
         <div class="overview-header">
           <h1 class="name">{{ seller.name }}</h1>
-          <star class="star" :size="36" :score="seller.score"></star>
-          <span class="rating-count">({{ seller.ratingCount }})</span>
-          <span class="sell-count">月售{{ seller.sellCount }}单</span>
+          <div class="desc">
+            <star class="star" :size="36" :score="seller.score"></star>
+            <span class="rating-count">({{ seller.ratingCount }})</span>
+            <span class="sell-count">月售{{ seller.sellCount }}单</span>
+          </div>
           <div class="favorite">
             <i class="icon-favorite"></i>
             <div class="text">已收藏</div>
@@ -30,7 +32,9 @@
       <split></split>
       <div class="bulletin">
         <h1 class="title">公告与活动</h1>
-        <p class="text">{{ seller.bulletin }}</p>
+        <div class="content-wrapper">
+          <p class="text">{{ seller.bulletin }}</p>
+        </div>
         <div class="supports">
           <ul>
             <li class="support-item" v-for="(value, index) in seller.supports" :key="index">
@@ -100,7 +104,6 @@
     left: 0
     bottom: 0
     width: 100%
-    height: 100%
     overflow: hidden
     color: rgb(7, 17, 27)
     .overview

@@ -71,7 +71,6 @@
           this.ratings = response.data
           this.$nextTick(() => {
             this.initScroll()
-            console.log(this.scroll)
           })
         }
       })
@@ -121,8 +120,8 @@
     position: absolute
     top: 179px
     left: 0
+    bottom: 0
     width: 100%
-    height: 100%
     font-size: 0
     overflow: hidden
     .overview
