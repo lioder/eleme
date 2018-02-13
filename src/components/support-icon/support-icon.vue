@@ -96,4 +96,19 @@
   .special_3
     bg-img('special_3')
 
+  .decrease_4
+    bg-img('decrease_4')
+
+  .discount_4
+    bg-img('discount_4')
+
+  .guarantee_4
+    bg-img('guarantee_4')
+
+  .invoice_4
+    bg-img('invoice_4')
+
+  .special_4
+    bg-img('special_4')
+
 </style>

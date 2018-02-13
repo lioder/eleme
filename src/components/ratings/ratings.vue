@@ -71,6 +71,7 @@
           this.ratings = response.data
           this.$nextTick(() => {
             this.initScroll()
+            console.log(this.scroll)
           })
         }
       })
