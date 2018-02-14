@@ -6,7 +6,7 @@
         <span class="block positive" :class="{'active': selectedType === 0}" @click="select(0,$event)">推荐</span>
         <span class="block negative" :class="{'active': selectedType === 1}" @click="select(1,$event)">吐槽</span>
       </div>
-      <div class="only-content" @click="onlyContent = !onlyContent">
+      <div class="only-content" @click="toggleContent">
         <i class="icon-check_circle" :class="{'on': onlyContent}"></i>
         <span class="text">只看有内容的评价</span>
       </div>
@@ -17,10 +17,14 @@
 <script type="text/ecmascript-6">
   const ALL = 2
   export default {
-    data () {
-      return {
-        selectedType: ALL,
-        onlyContent: false
+    props: {
+      selectedType: {
+        type: Number,
+        default: ALL
+      },
+      onlyContent: {
+        type: Boolean,
+        default: false
       }
     },
     methods: {
@@ -28,8 +32,10 @@
         if (!event._constructed) {
           return
         }
-        this.selectedType = type
-        this.$emit('refresh')
+        this.$emit('type', type)
+      },
+      toggleContent: function () {
+        this.$emit('content')
       }
     }
   }

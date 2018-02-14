@@ -53,6 +53,8 @@
   import food from 'components/food/food.vue'
   import BScroll from 'better-scroll'
 
+  const response = require('../../common/data/goodsData.json')
+  const ERR_OK = 0
   export default {
     props: {
       seller: {
@@ -91,17 +93,23 @@
       }
     },
     created () {
-      this.$ajax.get('/api/goods').then((response) => {
-        const ERR_OK = 0
-        response = response.data
-        if (response.errno === ERR_OK) {
-          this.goods = response.data
-          this.$nextTick(() => {
-            this.initScroll()
-            this.scrollHeight()
-          })
-        }
-      })
+//      this.$ajax.get('/api/goods').then((response) => {
+//        response = response.data
+//        if (response.errno === ERR_OK) {
+//          this.goods = response.data
+//          this.$nextTick(() => {
+//            this.initScroll()
+//            this.scrollHeight()
+//          })
+//        }
+//      })
+      if (response.errno === ERR_OK) {
+        this.goods = response.data
+        this.$nextTick(() => {
+          this.initScroll()
+          this.scrollHeight()
+        })
+      }
     },
     components: {
       sicon,

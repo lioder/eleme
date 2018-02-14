@@ -25,7 +25,7 @@
         </div>
       </div>
       <split></split>
-      <rating :ratings="ratings" ref="rating"></rating>
+      <rating-selector @content="toggleContent" @type="toggleType" ref="rating-selector" :selectedType="selectedType" :onlyContent="onlyContent"></rating-selector>
       <div class="ratings-wrapper">
         <ul>
           <li v-for="(rating,index) in ratings" :key="index" class="rating-item" v-show="needShow(rating)">
@@ -51,33 +51,42 @@
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
-  import rating from 'components/rating/rating.vue'
+  import ratingSelector from 'components/rating-selector/rating-selector.vue'
   import split from 'components/split/split.vue'
   import star from 'components/star/star.vue'
-  import {formatDate} from '../../common/js/date.js'
+  import { formatDate } from '../../common/js/date.js'
 
   const ALL = 2
+  const ERR_OK = 0
+  const response = require('../../common/data/ratingsData.json')
   export default {
     components: {
       split,
       star,
-      rating
+      ratingSelector
     },
     created () {
-      this.$ajax.get('/api/ratings').then((response) => {
-        const ERR_OK = 0
-        response = response.data
-        if (response.errno === ERR_OK) {
-          this.ratings = response.data
-          this.$nextTick(() => {
-            this.initScroll()
-          })
-        }
-      })
+//      this.$ajax.get('/api/ratings').then((response) => {
+//        response = response.data
+//        if (response.errno === ERR_OK) {
+//          this.ratings = response.data
+//          this.$nextTick(() => {
+//            this.initScroll()
+//          })
+//        }
+//      })
+      if (response.errno === ERR_OK) {
+        this.ratings = response.data
+        this.$nextTick(() => {
+          this.initScroll()
+        })
+      }
     },
     data () {
       return {
-        ratings: []
+        ratings: [],
+        selectedType: ALL,
+        onlyContent: false
       }
     },
     filters: {
@@ -89,21 +98,31 @@
     },
     methods: {
       initScroll: function () {
-        this.scroll = new BScroll(this.$refs.ratings, {
-          click: true
-        })
+        if (!this.scroll) {
+          this.scroll = new BScroll(this.$refs.ratings, {
+            click: true
+          })
+        } else {
+          this.scroll.refresh()
+        }
       },
       needShow: function (rating) {
-        let ratingSelector = this.$refs.rating
-        if (ratingSelector.onlyContent) {
+        if (this.onlyContent) {
           if (rating.text.length <= 0) {
             return false
           }
         }
-        if (ratingSelector.selectedType !== ALL && ratingSelector.selectedType !== rating.rateType) {
+        if (this.selectedType !== ALL && this.selectedType !== rating.rateType) {
           return false
         }
         return true
+      },
+      toggleContent: function () {
+        this.onlyContent = !this.onlyContent
+        console.log(this.onlyContent)
+      },
+      toggleType: function (type) {
+        this.selectedType = type
       }
     },
     props: {

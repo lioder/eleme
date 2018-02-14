@@ -22,6 +22,7 @@
   import header from './components/header/header.vue'
 
   const ERR_OK = 0
+  const response = require('./common/data/sellerData.json')
   export default {
     components: {
       'v-header': header
@@ -32,12 +33,15 @@
       }
     },
     created () {
-      this.$ajax.get('/api/seller').then((response) => {
-        response = response.data
-        if (response.errno === ERR_OK) {
-          this.seller = response.data
-        }
-      })
+//      this.$ajax.get('/api/seller').then((response) => {
+//        response = response.data
+//        if (response.errno === ERR_OK) {
+//          this.seller = response.data
+//        }
+//      })
+      if (response.errno === ERR_OK) {
+        this.seller = response.data
+      }
     }
   }
 </script>

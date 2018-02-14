@@ -31,7 +31,7 @@
       <split></split>
       <div class="food-rating">
         <div class="title">商品评价</div>
-        <rating @refresh="initScroll" ref="rating"></rating>
+        <rating-selector @content="toggleContent" @type="toggleType" ref="rating-selector" :selectedType="selectedType" :onlyContent="onlyContent"></rating-selector>
         <div class="rating-wrapper">
           <ul>
             <li class="rating-item" v-for="(rating,index) in food.ratings" :key="index" v-show="needShow(rating)">
@@ -55,7 +55,7 @@
 
 <script type="text/ecmascript-6">
   import cartcontrol from 'components/cart-control/cart-control.vue'
-  import rating from 'components/rating/rating.vue'
+  import ratingSelector from 'components/rating-selector/rating-selector.vue'
   import split from 'components/split/split.vue'
   import Vue from 'vue'
   import BScroll from 'better-scroll'
@@ -70,8 +70,14 @@
     },
     components: {
       cartcontrol,
-      rating,
+      ratingSelector,
       split
+    },
+    data () {
+      return {
+        selectedType: ALL,
+        onlyContent: false
+      }
     },
     filters: {
       formatDate: function (time) {
@@ -104,16 +110,22 @@
         this.$emit('add', target)
       },
       needShow: function (rating) {
-        let ratingSelector = this.$refs.rating
-        if (ratingSelector.onlyContent) {
+        if (this.onlyContent) {
           if (rating.text.length <= 0) {
             return false
           }
         }
-        if (ratingSelector.selectedType !== ALL && ratingSelector.selectedType !== rating.rateType) {
+        if (this.selectedType !== ALL && this.selectedType !== rating.rateType) {
           return false
         }
         return true
+      },
+      toggleContent: function () {
+        this.onlyContent = !this.onlyContent
+        console.log(this.onlyContent)
+      },
+      toggleType: function (type) {
+        this.selectedType = type
       }
     }
   }
