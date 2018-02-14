@@ -9,9 +9,9 @@
             <span class="rating-count">({{ seller.ratingCount }})</span>
             <span class="sell-count">月售{{ seller.sellCount }}单</span>
           </div>
-          <div class="favorite">
-            <i class="icon-favorite"></i>
-            <div class="text">已收藏</div>
+          <div class="favorite" @click="toggleFavorite">
+            <i class="icon-favorite" :class="{'active': favorite}"></i>
+            <div class="text">{{ favoriteText }}</div>
           </div>
         </div>
         <div class="overview-info">
@@ -70,12 +70,23 @@
   import star from 'components/star/star.vue'
   import split from 'components/split/split.vue'
   import sicon from 'components/support-icon/support-icon.vue'
+  import { saveToLocal, loadFromLocal } from '../../common/js/store'
   import BScroll from 'better-scroll'
 
   export default {
     props: {
       seller: {
         type: Object
+      }
+    },
+    data () {
+      return {
+        favorite: loadFromLocal('12345', 'favorite', false)
+      }
+    },
+    computed: {
+      favoriteText: function () {
+        return this.favorite ? '已收藏' : '收藏'
       }
     },
     watch: {
@@ -91,6 +102,10 @@
       })
     },
     methods: {
+      toggleFavorite: function () {
+        this.favorite = !this.favorite
+        saveToLocal('12345', 'favorite', this.favorite)
+      },
       initScroll: function () {
         if (!this.scroll) {
           this.scroll = new BScroll(this.$refs.seller, {
@@ -100,20 +115,22 @@
           this.scroll.refresh()
         }
 
-        const picWidth = 120
-        const margin = 6
-        const width = (picWidth + margin) * this.seller.pics.length - margin
-        this.$refs.picList.style.width = width + 'px'
-        this.$nextTick(() => {
-          if (!this.picScroll) {
-            this.picScroll = new BScroll(this.$refs.picWrapper, {
-              scrollX: true,
-              eventPassthrough: 'vertical'
-            })
-          } else {
-            this.picScroll.refresh()
-          }
-        })
+        if (this.seller.pics) {
+          const picWidth = 120
+          const margin = 6
+          const width = (picWidth + margin) * this.seller.pics.length - margin
+          this.$refs.picList.style.width = width + 'px'
+          this.$nextTick(() => {
+            if (!this.picScroll) {
+              this.picScroll = new BScroll(this.$refs.picWrapper, {
+                scrollX: true,
+                eventPassthrough: 'vertical'
+              })
+            } else {
+              this.picScroll.refresh()
+            }
+          })
+        }
       }
     },
     components: {
@@ -159,11 +176,15 @@
           position: absolute
           top: 0
           right: 0
+          width: 30px
           text-align: center
           .icon-favorite
             display: block
             margin-bottom: 4px
             font-size: 24px
+            color: rgb(147, 153, 159)
+            &.active
+              color: rgb(240, 20, 20)
           .text
             font-size: 10px
             color: rgb(77, 85, 93)

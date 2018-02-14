@@ -144,7 +144,6 @@
           margin-bottom: 9px
           .description-content
             font-size: 12px
-            font-weight: 200
             line-height: 12px
         .support
           line-height: 14px
@@ -154,7 +153,6 @@
   .support-description
     vertical-align: top
     font-size: 10px
-    font-weight: 200
 
   .support-detail
     position: absolute
@@ -169,7 +167,6 @@
     background-color: rgba(0, 0, 0, 0.2)
     .support-num
       font-size: 12px
-      font-weight: 200px
     .icon-keyboard_arrow_right
       vertical-align: middle
 
@@ -191,7 +188,6 @@
       bg-img('bulletin')
     .bulletin
       font-size: 10px
-      font-weight: 200px
     .icon-keyboard_arrow_right
       display: inline-block
       position: absolute
@@ -255,11 +251,9 @@
               margin-right: 12px
             .support-content
               font-size: 12px
-              font-weight: 200
           .bulletin-content
             line-height: 24px
             font-size: 12px
-            font-weight: 200
 
     .detail-close
       position: relative
