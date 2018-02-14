@@ -1,6 +1,6 @@
 # Eleme
 
-**An app for restaurant to order food online **
+**An app for restaurant to order food online**
 
 ## Preview
 
